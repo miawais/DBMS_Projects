@@ -1,53 +1,37 @@
-import tkinter as tk
+from tkinter import *
+from PIL import Image, ImageTk
 
-# Function to handle login button click (replace with your logic)
-def login_clicked():
-    username = username_entry.get()
-    password = password_entry.get()
-    # Implement your login validation and processing here (e.g., connect to a database)
-    print(f"Username: {username}, Password: {password}")  # Placeholder
+window = Tk()
+window.geometry("1280x720+0+0")
+window.resizable(True, True)
 
-# Function to toggle password visibility (optional)
-def toggle_password_visibility():
-    if password_entry.show == "":
-        password_entry.config(show="*")  # Hide password
-    else:
-        password_entry.config(show="")  # Show password
+background_image = Image.open('bd.jpg')
+background_photo = ImageTk.PhotoImage(background_image)
+bg_label = Label(window, image=background_photo)
+bg_label.place(x=0, y=0)
 
-# Create the main window
-root = tk.Tk()
-root.title("Login Page")
+login_frame = Frame(window,bg='black')
+login_frame.place(x=600, y=180)
 
-# **Background image (optional):**
-# You can add a background image using `tkinter.PhotoImage` or other methods.
+logo_image = Image.open('user.png')
+# Resize the image to fit within the login frame
+new_width = 100  # Adjust the width as needed
+new_height = 100  # Adjust the height as needed
+logo_image = logo_image.resize((new_width, new_height))
+logo_photo = ImageTk.PhotoImage(logo_image)
+logo_label = Label(login_frame, image=logo_photo)
+logo_label.grid(row=0, column=0,columnspan=4)
 
-# Username label and entry
-username_label = tk.Label(root, text="Username:")
-username_label.pack()
+profileImage=PhotoImage(file='profile.png')
+profileLabel=Label(login_frame,image=profileImage,
+                   text='USERNAME',compound=LEFT,
+                   font=('times new roman',15,'bold'))
 
-username_entry = tk.Entry(root)
-username_entry.pack()
+profileLabel.grid(row=1,column=1)
 
-# Password label and entry (set show="" for visible password initially)
-password_label = tk.Label(root, text="Password:")
-password_label.pack()
+usernameEntry=Entry(login_frame)
+usernameEntry.grid(row=1,column=3)
 
-password_entry = tk.Entry(root, show="")  # Adjust show attribute as needed
-password_entry.pack()
 
-# Login button
-login_button = tk.Button(root, text="Login", command=login_clicked)
-login_button.pack()
 
-# Optional: Remember me checkbox
-remember_me_var = tk.IntVar()  # Boolean variable for checkbox state
-remember_me_checkbox = tk.Checkbutton(root, text="Remember Me", variable=remember_me_var)
-remember_me_checkbox.pack()
-
-# Optional: Forgot password link
-forgot_password_link = tk.Button(root, text="Forgot Password")  # Add functionality if needed
-forgot_password_link.pack()
-
-# Optional: Show password toggle button (more descriptive variable name)
-
-root.mainloop()
+window.mainloop()
