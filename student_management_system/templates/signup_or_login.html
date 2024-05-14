@@ -38,7 +38,7 @@
             </form>
         </div>
         <div class="form-container sign-in">
-            <form action="/" method="POST">
+            <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <h1>Sign In</h1>
                 <div class="social-icons">
@@ -53,8 +53,8 @@
                     {{error}}
                 </div>
                 {% endif %}
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
+                <input type="email" name="email" id="" placeholder="Email">
+                <input type="password" name="password" id="" placeholder="Password">
                 <a href="#">Forget Your Password?</a>
                 <!-- <button>Sign In</button> -->
                 <input type="submit" class="button" value="Sign In">
