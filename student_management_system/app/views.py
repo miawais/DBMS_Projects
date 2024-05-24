@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from app.models import Customer
+from django.db.models import Count
+from app.models import Customer, Student, Course, Teacher, Enrollment, Grade
 from django.views import View
 
     # Create your views here.
@@ -81,7 +82,7 @@ class Login(View):
                     # else:
                     #     Login.return_url = None
                     #     return redirect('homepage')
-                return redirect('home') 
+                return redirect('dashboard') 
             else:
                 error_message = "Invalid email or password"
         else:
@@ -101,3 +102,39 @@ def logout(request):
 class home(View):
     def get(self, request):
         return render(request, 'index.html')
+    
+
+
+
+
+class Dashboard(View):
+    def get(self, request):
+        # Get the total counts
+        total_students = Student.objects.count()
+        total_courses = Course.objects.count()
+        total_teachers = Teacher.objects.count()  # Assuming 'Teacher' model instead of 'Professor'
+        total_grades = Grade.objects.count()  # Assuming 'Assignment' is referred as 'Grade'
+
+        # Get recent activities (example: last 5 enrollments and last 5 grades assigned)
+        recent_enrollments = Enrollment.objects.select_related('student', 'course').order_by('-enrollment_date')[:5]
+        recent_grades = Grade.objects.select_related('enrollment__student', 'enrollment__course').order_by('-grading_date')[:5]
+
+        recent_activities = []
+
+        for enrollment in recent_enrollments:
+            recent_activities.append(f'Student {enrollment.student.name} enrolled in Course {enrollment.course.course_name} on {enrollment.enrollment_date}.')
+
+        for grade in recent_grades:
+            recent_activities.append(f'Grade {grade.grade} was assigned to Student {grade.enrollment.student.name} for Course {grade.enrollment.course.course_name} on {grade.grading_date}.')
+
+        # Combine the context data
+        context = {
+            'total_students': total_students,
+            'total_courses': total_courses,
+            'total_teachers': total_teachers,
+            'total_grades': total_grades,
+            'recent_activities': recent_activities,
+        }
+
+        # Render the dashboard template with the context data
+        return render(request, 'dashboard.html', context)
