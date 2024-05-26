@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Count
+from app.forms import StudentForm, TeacherForm, CourseForm, GradeForm
 from app.models import Customer, Student, Course, Teacher, Enrollment, Grade
 from django.views import View
 
@@ -138,3 +139,136 @@ class Dashboard(View):
 
         # Render the dashboard template with the context data
         return render(request, 'dashboard.html', context)
+    
+
+
+
+# Class-based view for displaying student details
+class StudentDetailsView(View):
+    def get(self, request):
+        students = Student.objects.all().select_related()
+        context = {'students': students}
+        return render(request, 'student_details.html', context)
+
+# Class-based view for adding or editing a student
+class AddEditStudentView(View):
+    def get(self, request, pk=None):
+        if pk:
+            student = get_object_or_404(Student, pk=pk)
+        else:
+            student = None
+        
+        form = StudentForm(instance=student)
+        return render(request, 'add_edit_student.html', {'form': form})
+    
+    def post(self, request, pk=None):
+        if pk:
+            student = get_object_or_404(Student, pk=pk)
+        else:
+            student = None
+        
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_details')
+        
+        return render(request, 'add_edit_student.html', {'form': form})
+    
+
+
+
+# Class-based view for displaying teacher details
+class TeacherDetailsView(View):
+    def get(self, request):
+        teachers = Teacher.objects.all().select_related()
+        context = {'teachers': teachers}
+        return render(request, 'teacher_details.html', context)
+
+# Class-based view for adding or editing a teacher
+class AddEditTeacherView(View):
+    def get(self, request, pk=None):
+        if pk:
+            teacher = get_object_or_404(Teacher, pk=pk)
+        else:
+            teacher = None
+        
+        form = TeacherForm(instance=teacher)
+        return render(request, 'add_edit_teacher.html', {'form': form})
+    
+    def post(self, request, pk=None):
+        if pk:
+            teacher = get_object_or_404(Teacher, pk=pk)
+        else:
+            teacher = None
+        
+        form = TeacherForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect('teacher_details')
+        
+        return render(request, 'add_edit_teacher.html', {'form': form})
+    
+
+# Class-based view for displaying course details
+class CourseDetailsView(View):
+    def get(self, request):
+        courses = Course.objects.all().select_related()
+        context = {'courses': courses}
+        return render(request, 'course_details.html', context)
+
+# Class-based view for adding or editing a course
+class AddEditCourseView(View):
+    def get(self, request, pk=None):
+        if pk:
+            course = get_object_or_404(Course, pk=pk)
+        else:
+            course = None
+        
+        form = CourseForm(instance=course)
+        return render(request, 'add_edit_course.html', {'form': form})
+    
+    def post(self, request, pk=None):
+        if pk:
+            course = get_object_or_404(Course, pk=pk)
+        else:
+            course = None
+        
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course_details')
+        
+        return render(request, 'add_edit_course.html', {'form': form})
+    
+
+
+# Class-based view for displaying grade details
+class GradeDetailsView(View):
+    def get(self, request):
+        grades = Grade.objects.all().select_related('enrollment__student', 'enrollment__course')
+        context = {'grades': grades}
+        return render(request, 'grade_details.html', context)
+
+# Class-based view for adding or editing a grade
+class AddEditGradeView(View):
+    def get(self, request, pk=None):
+        if pk:
+            grade = get_object_or_404(Grade, pk=pk)
+        else:
+            grade = None
+        
+        form = GradeForm(instance=grade)
+        return render(request, 'add_edit_grade.html', {'form': form})
+    
+    def post(self, request, pk=None):
+        if pk:
+            grade = get_object_or_404(Grade, pk=pk)
+        else:
+            grade = None
+        
+        form = GradeForm(request.POST, instance=grade)
+        if form.is_valid():
+            form.save()
+            return redirect('grade_details')
+        
+        return render(request, 'add_edit_grade.html', {'form': form})

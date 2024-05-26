@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import Signup, Login, logout, home, Dashboard
+from app.views import Signup, Login, logout, home, Dashboard, StudentDetailsView, AddEditStudentView, TeacherDetailsView, AddEditTeacherView, CourseDetailsView, AddEditCourseView, GradeDetailsView, AddEditGradeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,16 @@ urlpatterns = [
     path('home/', home.as_view(), name="home"),
     path('dashboard', Dashboard.as_view(), name='dashboard'),
     path('logout/', logout, name="logout"),
+    path('students/', StudentDetailsView.as_view(), name='student_details'),
+    path('students/add/', AddEditStudentView.as_view(), name='add_edit_student'),
+    path('students/edit/<int:pk>/', AddEditStudentView.as_view(), name='edit_student'),
+    path('teachers/', TeacherDetailsView.as_view(), name='teacher_details'),
+    path('teachers/add/', AddEditTeacherView.as_view(), name='add_edit_teacher'),
+    path('teachers/edit/<int:pk>/', AddEditTeacherView.as_view(), name='edit_teacher'),
+    path('courses/', CourseDetailsView.as_view(), name='course_details'),
+    path('courses/add/', AddEditCourseView.as_view(), name='add_edit_course'),
+    path('courses/edit/<int:pk>/', AddEditCourseView.as_view(), name='edit_course'),
+    path('grades/', GradeDetailsView.as_view(), name='grade_details'),
+    path('grades/add/', AddEditGradeView.as_view(), name='add_edit_grade'),
+    path('grades/edit/<int:pk>/', AddEditGradeView.as_view(), name='edit_grade'),
 ]

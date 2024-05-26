@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Grade Details</title>
+</head>
+
+<body>
+    <h1>Grade Details</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Grade</th>
+                <th>Grading Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            <tr>
+                <td>{{ grade.enrollment.student.name }}</td>
+                <td>{{ grade.enrollment.course.course_name }}</td>
+                <td>{{ grade.grade }}</td>
+                <td>{{ grade.grading_date }}</td>
+                <td>
+                    <a href="{% url 'edit_grade' grade.pk %}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_edit_grade' %}">Add New Grade</a>
+</body>
+
+</html>
