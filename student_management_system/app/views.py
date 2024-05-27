@@ -100,9 +100,9 @@ def logout(request):
 
 
 
-class home(View):
-    def get(self, request):
-        return render(request, 'index.html')
+# class home(View):
+#     def get(self, request):
+#         return render(request, 'index.html')
     
 
 
